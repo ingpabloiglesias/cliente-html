@@ -1,5 +1,5 @@
 (function() {
-    cargarCuentas()
+    cargarCuentas();
 })();
 
 var clientes = [];
@@ -32,15 +32,17 @@ function filtrarTabla() {
 function cargarFilas(datos) {
     const tablaClientesCuerpo = $("#tablaClientes");
     tablaClientesCuerpo.find("tbody tr").remove();
+    let indice = 1;
     datos.forEach((cliente, ind) => {
         if (cliente.nombre || cliente.apellido || cliente.email) {
             const row = `<tr id="cliente-${ind}">
-            <th scope="row">${ind + 1}</th>
+            <th scope="row">${indice}</th>
             <td>${cliente.nombre}</td>
             <td>${cliente.apellido}</td>
             <td>${cliente.email}</td>
             </tr>`;
             tablaClientesCuerpo.append(row);
+            indice++;
         }
     })
 }
