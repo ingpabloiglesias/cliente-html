@@ -32,7 +32,7 @@
 
     $("#cliente-imagen").change(function() {
         readURL(this);
-      });
+    });
 })();
 
 
