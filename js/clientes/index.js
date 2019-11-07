@@ -18,14 +18,14 @@ function filtrarTabla() {
     const filtrado = clientes.filter((elem) => {
         let check = false
         if (elem.nombre)
-            check = check || elem.nombre.toLowerCase().includes(cadena);
+        check = check || elem.nombre.toLowerCase().includes(cadena);
         if (elem.apellido)
-            check = check || elem.apellido.toLowerCase().includes(cadena);
+        check = check || elem.apellido.toLowerCase().includes(cadena);
         if (elem.email)
-            check = check || elem.email.toLowerCase().includes(cadena);
+        check = check || elem.email.toLowerCase().includes(cadena);
         return check;
     });
-
+    
     cargarFilas(filtrado);
 }
 
@@ -40,6 +40,7 @@ function cargarFilas(datos) {
             <td>${cliente.nombre}</td>
             <td>${cliente.apellido}</td>
             <td>${cliente.email}</td>
+            <td><button id="elim-${cliente._id}" type="button" class="btn btn-danger" onclick="eliminarCliente('${cliente._id}')">Eliminar</button></td>
             </tr>`;
             tablaClientesCuerpo.append(row);
             indice++;
@@ -55,4 +56,31 @@ function recargarTabla() {
         clientes = data;
         cargarFilas(data);
     });
+}
+
+function eliminarCliente(idCliente) {
+    if(confirm("Esta seguro que desea eliminar el cliente con id " + idCliente)) {
+        $("#elim-" + idCliente).attr("disabled", true);
+        setTimeout(function(){
+            $.ajax({
+                url: "http://localhost:3000/v1/cuentas/" + idCliente,
+                method: "DELETE",
+                dataType: "json"
+            }).done(() => {
+                $(".alert-success").removeClass("oculto");
+                $(".alert-error").addClass("oculto");
+                recargarTabla();
+            }).fail((err) => {
+                $("#elim-" + idCliente).removeAttr("disabled");
+                $(".alert-error").removeClass("oculto");
+                $(".alert-success").addClass("oculto");
+                console.log(err);
+            }).always(() => {
+                console.log("Siempre");
+            });
+            
+        }, 3000);
+    } else {
+        return false;
+    }
 }
