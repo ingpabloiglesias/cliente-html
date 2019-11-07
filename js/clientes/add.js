@@ -4,21 +4,16 @@
         $("#cliente-submit-disabled").removeClass("oculto");
         $("#cliente-submit").addClass("oculto");
         $(".alert-danger").addClass("oculto");
-        const nuevoCliente = {
-            "nombre": $("#cliente-nombre").val(),
-            "apellido": $("#cliente-apellido").val(),
-            "usuario": $("#cliente-usuario").val(),
-            "email": $("#cliente-email").val(),
-            "password": $("#cliente-password").val(),
-            "fecha_nacimiento": $("#cliente-nacimiento").val()
-        };
-        console.log(nuevoCliente);
+        const form = document.getElementById("cliente-formulario");
+        const nuevoClienteForm = new FormData(form);
         setTimeout(function(){
             $.ajax({
                 url: "http://localhost:3000/v1/cuentas",
                 method: "POST",
-                data: nuevoCliente,
-                dataType: "json"
+                data: nuevoClienteForm,
+                dataType: "json",
+                processData: false,  // tell jQuery not to process the data
+                contentType: false   // tell jQuery not to set contentType
             }).done((data) => {
                 $(".alert-success").removeClass("oculto");
                 $('#cliente-formulario').trigger("reset");
@@ -34,4 +29,23 @@
             });
         }, 3000);
     });
+
+    $("#cliente-imagen").change(function() {
+        readURL(this);
+      });
 })();
+
+
+function readURL(input) {
+    if (input.files && input.files[0]) {
+      var reader = new FileReader();
+      
+      reader.onload = function(e) {
+        $('#preview').attr('src', e.target.result).removeClass("oculto");
+      }
+      
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
+  
+  

@@ -30,3 +30,7 @@ body {
 .oculto {
     display: none;
 }
+
+img#preview {
+    max-width: 200px;
+}
